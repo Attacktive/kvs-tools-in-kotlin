@@ -5,13 +5,15 @@ plugins {
 }
 
 group = "attacktive"
-version = "1.0-SNAPSHOT"
+version = "0.1.0"
 
 repositories {
 	mavenCentral()
 }
 
 dependencies {
+	implementation("net.sourceforge.argparse4j:argparse4j:0.9.0")
+
 	testImplementation(kotlin("test"))
 }
 
@@ -20,5 +22,5 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-	kotlinOptions.jvmTarget = "1.8"
+	kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
 }

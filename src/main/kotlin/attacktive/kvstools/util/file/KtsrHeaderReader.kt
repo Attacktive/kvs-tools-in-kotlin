@@ -4,13 +4,14 @@ import attacktive.kvstools.extension.toUInt
 import java.io.File
 
 object KtsrHeaderReader {
-	fun readHeader(pathToFile: String) {
+	fun readHeader(pathToFile: String): KtsrHeader {
 		println("Trying to open $pathToFile")
 		File(pathToFile).inputStream().use {
 			val bytes = it.readNBytes(96)
 			val ktsrHeader = parseKtsrHeader(bytes)
 
 			println(ktsrHeader)
+			return ktsrHeader
 		}
 	}
 

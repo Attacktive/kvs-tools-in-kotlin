@@ -2,7 +2,7 @@ package attacktive.kvstools.util
 
 import kotlin.system.exitProcess
 
-object InputHandler {
+object ArgumentHandler {
 	fun handle(vararg args: String, errorMessage: String): String {
 		if (args.isEmpty()) {
 			System.err.println(errorMessage)

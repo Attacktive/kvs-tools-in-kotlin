@@ -8,3 +8,10 @@ fun UInt.toByteArray(): ByteArray {
 
 	return buffer.array()
 }
+
+fun ByteArray.toUInt(): UInt {
+	return ((this[0].toUInt() and 0xffU) shl 24) or
+		((this[1].toUInt() and 0xffU) shl 16) or
+		((this[2].toUInt() and 0xffU) shl 8) or
+		(this[3].toUInt() and 0xffU)
+}

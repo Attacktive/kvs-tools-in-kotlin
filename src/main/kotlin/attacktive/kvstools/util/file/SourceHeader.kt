@@ -1,7 +1,7 @@
 package attacktive.kvstools.util.file
 
 import attacktive.kvstools.extension.toByteArray
-import attacktive.kvstools.util.byteArrayOfNulls
+import attacktive.kvstools.byteArrayOfNulls
 
 /**
  * The metadata is taken from http://wiki.xentax.com/index.php/Koei_Tecmo_Audio_SRSA_SRST

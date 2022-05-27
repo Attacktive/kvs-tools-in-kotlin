@@ -1,7 +1,9 @@
 package attacktive.kvstools.util.file
 
 import attacktive.kvstools.extension.toByteArray
-import attacktive.kvstools.util.byteArrayOfNulls
+import attacktive.kvstools.byteArrayOfNulls
+import attacktive.kvstools.hexFormatter
+import java.text.DecimalFormat
 
 /**
  * The metadata is taken from http://wiki.xentax.com/index.php/Koei_Tecmo_Audio_SRSA_SRST
@@ -9,8 +11,8 @@ import attacktive.kvstools.util.byteArrayOfNulls
  * However, the first null seems to be of 2 bytes not 1.
  */
 data class KtsrHeader(
-	val magic: String = "KTSR",
-	val chunkType: ByteArray = byteArrayOf(0x02, 0x94.toByte(), 0xdd.toByte(), 0xfc.toByte()),
+	val magic: String = DEFAULT_MAGIC,
+	val chunkType: ByteArray = DEFAULT_CHUNK_TYPE,
 	val version: Byte = 1,
 	/**
 	 * 0x01 - PC
@@ -21,6 +23,21 @@ data class KtsrHeader(
 	val game: Game,
 	val fileSize: UInt
 ) {
+	companion object {
+		const val DEFAULT_MAGIC: String = "KTSR"
+		val DEFAULT_CHUNK_TYPE: ByteArray = byteArrayOf(0x02, 0x94.toByte(), 0xdd.toByte(), 0xfc.toByte())
+	}
+
+	override fun toString(): String {
+		return "magic: $magic\n" +
+			"chunkType: ${hexFormatter().formatHex(chunkType)}\n" +
+			"version: $version\n" +
+			"platform: $platform\n" +
+			"fileSize: ${DecimalFormat("#,###").format(fileSize.toLong())} bytes\n" +
+			"gameId: ${hexFormatter().formatHex(game.id)}" +
+			"gameEntries: ${hexFormatter().formatHex(game.entries)}"
+	}
+
 	fun toBytes(): ByteArray {
 		return (
 			magic.toByteArray() +
@@ -58,5 +75,9 @@ data class KtsrHeader(
 				0xc3.toByte(), 0x2c, 0x1b, 0x00
 			) + byteArrayOfNulls(12)
 		);
+
+		companion object {
+			fun byId(id: ByteArray): Game = Game.values().first { it.id.contentEquals(id) }
+		}
 	}
 }

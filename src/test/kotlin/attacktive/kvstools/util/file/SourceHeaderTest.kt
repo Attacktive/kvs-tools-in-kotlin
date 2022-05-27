@@ -1,7 +1,7 @@
 package attacktive.kvstools.util.file
 
 import attacktive.kvstools.extension.toByteArray
-import attacktive.kvstools.util.byteArrayOfNulls
+import attacktive.kvstools.byteArrayOfNulls
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 

@@ -14,3 +14,13 @@ fun byteArrayOfNulls(numberOfNulls: Int): ByteArray {
 
 	return byteArray
 }
+
+@OptIn(ExperimentalUnsignedTypes::class)
+fun ubyteArrayOfNulls(numberOfNulls: Int): UByteArray {
+	var ubyteArray = ubyteArrayOf()
+	repeat(numberOfNulls) {
+		ubyteArray += 0x00U
+	}
+
+	return ubyteArray
+}

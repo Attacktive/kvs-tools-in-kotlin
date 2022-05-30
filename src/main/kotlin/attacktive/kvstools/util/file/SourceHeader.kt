@@ -1,27 +1,49 @@
 package attacktive.kvstools.util.file
 
-import attacktive.kvstools.extension.toByteArray
-import attacktive.kvstools.byteArrayOfNulls
+import attacktive.kvstools.extension.formatHex
+import attacktive.kvstools.extension.toUByteArray
+import attacktive.kvstools.hexFormatter
+import attacktive.kvstools.ubyteArrayOfNulls
 
 /**
- * The metadata is taken from http://wiki.xentax.com/index.php/Koei_Tecmo_Audio_SRSA_SRST
+ * @param unknown In Atelier Ryza 1, the very first one is:
+ *
+ * `3155 0400 0300 0000`,
+ *
+ * and the next one:
+ *
+ * `ff93 0b00 0300 0000`
  */
-data class SourceHeader(
-	val magic: Magic,
-	val fileSize: UInt
-) {
-	fun toBytes(): ByteArray {
-		return (
-			magic.toByteArray() +
-			byteArrayOfNulls(4) +
-			fileSize.toByteArray() +
-			byteArrayOfNulls(4)
-		)
+@OptIn(ExperimentalUnsignedTypes::class)
+data class SourceHeader(val signature: Signature, val fileSize: UInt, val unknown: UByteArray) {
+	companion object {
+		const val MAXIMUM_SIZE_OF_HEADER = 32
 	}
 
-	enum class Magic(val value: String, val extension: String) {
+	override fun toString(): String {
+		return """
+			signature: $signature
+			fileSize: $fileSize
+			unknown: ${hexFormatter().formatHex(unknown)}
+		""".trimIndent()
+	}
+
+	fun toBytes(): UByteArray {
+		return signature.toByteArray().toUByteArray() +
+			fileSize.toUByteArray() +
+			unknown +
+			ubyteArrayOfNulls(16)
+	}
+
+	enum class Signature(val value: String, val extension: String) {
 		KOVS("KOVS", "kvs"),
 		KTSS("KTSS", "kns");
+
+		companion object {
+			fun bySignatureBytes(bytes: UByteArray): Signature {
+				return Signature.values().first { signature -> signature.toByteArray().toUByteArray().contentEquals(bytes) }
+			}
+		}
 
 		fun toByteArray() = value.toByteArray()
 	}

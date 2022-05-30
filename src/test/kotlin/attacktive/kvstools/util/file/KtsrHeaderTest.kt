@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 class KtsrHeaderTest {
 	@Test
 	fun testKtsrHeader() {
-		val magic = "KTSR"
+		val signature = "KTSR"
 		val chunkType: ByteArray = byteArrayOf(0x02, 0x94.toByte(), 0xdd.toByte(), 0xfc.toByte())
 		val version = 2.toByte()
 		val platform = 1.toByte()
@@ -23,8 +23,8 @@ class KtsrHeaderTest {
 			fileSize = fileSize
 		)
 
-		val headerBytes = ktsrHeader.toBytes()
-		val actualMagic = headerBytes.copyOfRange(0, 4)
+		val headerBytes = ktsrHeader.toUBytes()
+		val actualSignature = headerBytes.copyOfRange(0, 4)
 		val actualChunkType = headerBytes.copyOfRange(4, 8)
 		val actualVersion = headerBytes[8]
 		val actualNulls1 = headerBytes.copyOfRange(9, 11)
@@ -36,7 +36,7 @@ class KtsrHeaderTest {
 		val actualNulls3 = headerBytes.copyOfRange(32, 64)
 		val actualGameEntries = headerBytes.copyOfRange(64, 96)
 
-		assertContentEquals(magic.toByteArray(), actualMagic)
+		assertContentEquals(signature.toByteArray(), actualSignature)
 		assertContentEquals(chunkType, actualChunkType)
 		assertEquals(version, actualVersion)
 		assertContentEquals(byteArrayOfNulls(2), actualNulls1)

@@ -1,21 +1,23 @@
 package attacktive.kvstools.util.file
 
+import attacktive.kvstools.extension.formatHex
 import attacktive.kvstools.hexFormatter
 
+@OptIn(ExperimentalUnsignedTypes::class)
 object KtsrHeaderValidator {
-	private val expectedPlatforms = byteArrayOf(1, 3, 4)
+	private val expectedPlatforms = ubyteArrayOf(1U, 3U, 4U)
 
 	fun validate(
-		magic: String,
-		chunkType: ByteArray,
-		platform: Byte,
-		gameId: ByteArray,
+		signature: String,
+		chunkType: UByteArray,
+		platform: UByte,
+		gameId: UByteArray,
 		fileSize1: UInt,
 		fileSize2: UInt,
-		gameEntries: ByteArray
+		gameEntries: UByteArray
 	) {
-		if (magic != KtsrHeader.DEFAULT_MAGIC) {
-			throw InvalidMagicException(magic)
+		if (signature != KtsrHeader.DEFAULT_SIGNATURE) {
+			throw InvalidSignatureException(signature)
 		}
 		if (!chunkType.contentEquals(KtsrHeader.DEFAULT_CHUNK_TYPE)) {
 			throw InvalidChunkTypeException(chunkType)
@@ -39,19 +41,19 @@ object KtsrHeaderValidator {
 
 	open class KtsrHeaderParseException(message: String, cause: Throwable? = null): RuntimeException(message, cause)
 
-	class InvalidMagicException(magic: String, cause: Throwable? = null):
-		KtsrHeaderParseException(String.format("Unexpected file signature: %s", magic), cause)
+	class InvalidSignatureException(signature: String, cause: Throwable? = null):
+		KtsrHeaderParseException(String.format("Unexpected file signature: %s", signature), cause)
 
-	class InvalidChunkTypeException(chunkType: ByteArray, cause: Throwable? = null):
+	class InvalidChunkTypeException(chunkType: UByteArray, cause: Throwable? = null):
 		KtsrHeaderParseException(String.format("Unexpected chunk type: %s", hexFormatter().formatHex(chunkType)), cause)
 
-	class InvalidPlatformException(platform: Byte, cause: Throwable? = null):
+	class InvalidPlatformException(platform: UByte, cause: Throwable? = null):
 		KtsrHeaderParseException(String.format("Unexpected platform: %d", platform), cause)
 
 	class InconsistentFileSizeException(fileSize1: UInt, fileSize2: UInt, cause: Throwable? = null):
 		KtsrHeaderParseException(String.format("The file size data is inconsistent: %d vs %d", fileSize1, fileSize2), cause)
 
-	class InvalidGameIdException(gameId: ByteArray, cause: Throwable? = null):
+	class InvalidGameIdException(gameId: UByteArray, cause: Throwable? = null):
 		KtsrHeaderParseException(String.format("Unexpected game ID: %s", hexFormatter().formatHex(gameId)), cause)
 
 	class InvalidGameEntriesException(cause: Throwable? = null):

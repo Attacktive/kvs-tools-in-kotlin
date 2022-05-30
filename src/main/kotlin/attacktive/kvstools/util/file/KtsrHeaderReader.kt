@@ -7,7 +7,7 @@ object KtsrHeaderReader {
 	fun readHeader(pathToFile: String): KtsrHeader {
 		println("Trying to open $pathToFile")
 		File(pathToFile).inputStream().use {
-			val bytes = it.readNBytes(96)
+			val bytes = it.readNBytes(KtsrHeader.NUMBER_OF_BYTES)
 			val ktsrHeader = parseKtsrHeader(bytes)
 
 			println(ktsrHeader)

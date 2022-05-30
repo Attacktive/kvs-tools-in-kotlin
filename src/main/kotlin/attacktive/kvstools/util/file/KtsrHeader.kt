@@ -25,6 +25,7 @@ data class KtsrHeader(
 ) {
 	companion object {
 		const val DEFAULT_MAGIC: String = "KTSR"
+		const val NUMBER_OF_BYTES: Int = 96
 		val DEFAULT_CHUNK_TYPE: ByteArray = byteArrayOf(0x02, 0x94.toByte(), 0xdd.toByte(), 0xfc.toByte())
 	}
 
